@@ -2,10 +2,13 @@
 
 ## Setup
 
+Pre-install the dependencies:
+BUN `powershell -c "irm bun.sh/install.ps1 | iex"`
+
 Install the dependencies:
 
 ```bash
-pnpm install
+bun install
 ```
 
 ## Get started
@@ -13,17 +16,17 @@ pnpm install
 Start the dev server:
 
 ```bash
-pnpm dev
+bun run dev
 ```
 
 Build the app for production:
 
 ```bash
-pnpm build
+bun run build
 ```
 
 Preview the production build locally:
 
 ```bash
-pnpm preview
+bun run preview
 ```
