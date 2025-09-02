@@ -1,39 +1,7 @@
-import { useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Link as MuiLink,
-  Container,
-  Box,
-  Menu,
-  MenuItem,
-  IconButton,
-  useMediaQuery,
-  type Theme,
-  Stack,
-} from "@mui/material";
-import {
-  Menu as MenuIcon,
-  CurrencyBitcoin as BitcoinIcon,
-} from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { CurrencyBitcoin as BitcoinIcon } from "@mui/icons-material";
+import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 
 export function Nav() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const isMobile = useMediaQuery((theme: Theme) =>
-    theme.breakpoints.down("md")
-  );
-
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <Box
       sx={{
@@ -57,50 +25,6 @@ export function Nav() {
               BitcoinViewer
             </Typography>
           </Box>
-
-          <Box sx={{ flexGrow: 1 }} />
-
-          {!isMobile ? (
-            <Stack direction={"row"} gap={2}>
-              <MuiLink component={Link} to="#features">
-                <Typography variant="h6">Features</Typography>
-              </MuiLink>
-              <MuiLink component={Link} to="#pricing">
-                <Typography variant="h6">Pricing</Typography>
-              </MuiLink>
-              <MuiLink component={Link} to="#documentation">
-                <Typography variant="h6">Documentation</Typography>
-              </MuiLink>
-            </Stack>
-          ) : (
-            <>
-              <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="menu"
-                onClick={handleMenu}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                <MenuItem onClick={handleClose}>
-                  <MuiLink component={Link} to="#features">
-                    <Typography variant="h6">Features</Typography>
-                  </MuiLink>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <MuiLink component={Link} to="#pricing">
-                    <Typography variant="h6">Pricing</Typography>
-                  </MuiLink>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <MuiLink component={Link} to="#documentation">
-                    <Typography variant="h6">Documentation</Typography>
-                  </MuiLink>
-                </MenuItem>
-              </Menu>
-            </>
-          )}
         </Toolbar>
       </AppBar>
 

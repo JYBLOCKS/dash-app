@@ -20,6 +20,10 @@
     "noUnusedParameters": true,
     "esModuleInterop": true,
     "types": ["@testing-library/jest-dom"],
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src"]
 }

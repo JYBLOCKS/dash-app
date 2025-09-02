@@ -1,70 +1,37 @@
-import { useState, useEffect } from "react";
+import { Coin } from "@/types/coins";
 import {
+  ArrowDownward,
+  ArrowUpward,
+  TrendingDown,
+  TrendingUp,
+} from "@mui/icons-material";
+import {
+  Box,
   Card,
   CardContent,
-  Typography,
-  Box,
   Chip,
-  IconButton,
-  CircularProgress,
   type Theme,
+  Typography,
   useMediaQuery,
 } from "@mui/material";
-import {
-  TrendingUp,
-  TrendingDown,
-  ArrowUpward,
-  ArrowDownward,
-  Refresh,
-} from "@mui/icons-material";
 
 interface CurrencyCardProps {
   currency: string;
+  coin: Coin;
   currencySymbol: string;
-  initialValue: number;
 }
 
 export function CurrencyCard({
   currency,
+  coin,
   currencySymbol,
-  initialValue,
 }: CurrencyCardProps) {
   const isMobile = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("md")
   );
-  const [price, setPrice] = useState(initialValue);
-  const [previousPrice, setPreviousPrice] = useState(initialValue);
-  const [change, setChange] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const updatePrice = () => {
-    setIsLoading(true);
-    setPreviousPrice(price);
-
-    // Simulate API call with timeout
-    setTimeout(() => {
-      const randomChange = (Math.random() - 0.48) * 200; // Slight upward bias
-      const newPrice = price + randomChange;
-      setPrice(newPrice);
-      setChange(randomChange);
-      setIsLoading(false);
-    }, 1000);
-  };
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    // Initial update
-    updatePrice();
-
-    // Set up interval for periodic updates
-    const interval = setInterval(updatePrice, 30000);
-
-    // Clean up interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
-
-  const isPositiveChange = change >= 0;
-  const changePercent = (change / previousPrice) * 100;
+  const isPositiveChange = coin?.price_change_percentage_24h >= 0 || 0;
+  const changePercent = coin?.price_change_percentage_24h * 100 || 0;
 
   return (
     <Card
@@ -90,9 +57,6 @@ export function CurrencyCard({
           <Typography variant="h6" component="div">
             BTC / {currency}
           </Typography>
-          <IconButton size="small" onClick={updatePrice} disabled={isLoading}>
-            {isLoading ? <CircularProgress size={20} /> : <Refresh />}
-          </IconButton>
         </Box>
 
         <Typography
@@ -101,7 +65,9 @@ export function CurrencyCard({
           sx={{ fontWeight: "bold", mb: 2 }}
         >
           {currencySymbol}
-          {price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+          {coin?.current_price.toLocaleString(undefined, {
+            maximumFractionDigits: 2,
+          })}
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -125,7 +91,7 @@ export function CurrencyCard({
               sx={{ ml: 0.5 }}
             >
               {currencySymbol}
-              {Math.abs(change).toFixed(2)}
+              {Math.abs(coin?.price_change_percentage_24h).toFixed(2)}
             </Typography>
           </Box>
         </Box>
