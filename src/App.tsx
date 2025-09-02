@@ -70,7 +70,9 @@ const App = () => {
         justifyContent={"center"}
         alignItems={"center"}
       >
-        <PriceChart coins={coins[0]} />
+        {coins && coins.length > 0 && (
+          <PriceChart coins={coins.filter((item) => item.id === "usd")[0]} />
+        )}
       </Stack>
       <Footer />
     </Box>

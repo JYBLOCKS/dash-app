@@ -13,6 +13,33 @@ import {
 import { LineChart } from "@mui/x-charts/LineChart";
 import { useEffect, useState } from "react";
 
+const generateChartData = (days: number, current_price: number) => {
+  const data = [];
+  let currentPrice = current_price || 0;
+
+  const now = new Date();
+
+  for (let i = days; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(now.getDate() - i);
+
+    const change = currentPrice * (0.99 + Math.random() * 0.04);
+    currentPrice = change;
+
+    data.push({
+      date: date.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      price: Math.round(currentPrice),
+      volume: Math.round(Math.random() * 1000 * (1 + (days - i) / days)),
+      timestamp: date.getTime(),
+    });
+  }
+
+  return data;
+};
+
 export function PriceChart({ coins }: { coins: Coin }) {
   const isMobile = useMediaQuery((theme: Theme) =>
     theme.breakpoints.down("md")
@@ -20,33 +47,6 @@ export function PriceChart({ coins }: { coins: Coin }) {
   const [selectedPeriod, setSelectedPeriod] = useState("30d");
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const [chartData, setChartData] = useState<any[]>([]);
-
-  const generateChartData = (days: number) => {
-    const data = [];
-    let currentPrice = coins?.current_price || 0;
-
-    const now = new Date();
-
-    for (let i = days; i >= 0; i--) {
-      const date = new Date();
-      date.setDate(now.getDate() - i);
-
-      const change = currentPrice * (0.99 + Math.random() * 0.04);
-      currentPrice = change;
-
-      data.push({
-        date: date.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        }),
-        price: Math.round(currentPrice),
-        volume: Math.round(Math.random() * 1000 * (1 + (days - i) / days)),
-        timestamp: date.getTime(),
-      });
-    }
-
-    return data;
-  };
 
   useEffect(() => {
     let days = 365;
@@ -65,7 +65,7 @@ export function PriceChart({ coins }: { coins: Coin }) {
         break;
     }
 
-    setChartData(generateChartData(days));
+    setChartData(generateChartData(days, coins?.current_price));
   }, [selectedPeriod]);
 
   const handlePeriodChange = (
