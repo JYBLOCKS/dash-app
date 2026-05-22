@@ -7,7 +7,7 @@ import {
   type Theme,
   useMediaQuery,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { CurrencyBitcoin } from "@mui/icons-material";
 
 export function Footer() {
